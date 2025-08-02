@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Add New Project</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 40px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    :root {
+      --bg: #f9f9f9;
+      --text: #333;
+      --card-bg: #fff;
+    }
+
+    body.dark {
+      --bg: #121212;
+      --text: #e0e0e0;
+      --card-bg: #1e1e1e;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: var(--card-bg);
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+    }
+
+    input[type="text"],
+    input[type="url"],
+    textarea {
+      width: 100%;
+      padding: 10px 15px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    button[type="submit"],
+    #dark-toggle,
+    .back-btn {
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    button[type="submit"]:hover,
+    #dark-toggle:hover,
+    .back-btn:hover {
+      background-color: #2980b9;
+    }
+
+    #success-msg {
+      text-align: center;
+      margin-top: 20px;
+      color: limegreen;
+    }
+
+    .top-controls {
+      display: flex;
+      justify-content: space-between;
+      max-width: 600px;
+      margin: 0 auto 20px auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-controls">
+    <button class="back-btn" onclick="location.href='/'">⬅ Back to Portfolio</button>
+    <button id="dark-toggle">🌙 Toggle Dark Mode</button>
+  </div>
+
+  <h2>Add New Project</h2>
+ <form id="add-project-form">
+  <input type="text" id="new-title" placeholder="Project Title" required />
+
+  <textarea id="new-description" placeholder="Project Description" required></textarea>
+
+  <input type="text" id="new-tech" placeholder="Tech Stack (e.g. Python, Django)" required />
+
+  <input type="url" id="new-link" placeholder="GitHub or Live Link" required />
+
+  <button type="submit">Add Project</button>
+</form>
+
+  <p id="success-msg"></p>
+
+  <script>
+    // Theme toggle
+    const toggleBtn = document.getElementById('dark-toggle');
+    const prefersDark = localStorage.getItem('theme') === 'dark';
+
+    if (prefersDark) {
+      document.body.classList.add('dark');
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Add project to localStorage
+    document.getElementById('add-project-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const title = document.getElementById('new-title').value;
+      const description = document.getElementById('new-description').value;
+      const tech = document.getElementById('new-tech').value;
+      const link = document.getElementById('new-link').value;
+
+      const newProject = { title, description,tech, link };
+      let projects = JSON.parse(localStorage.getItem('projects')) || [];
+      projects.push(newProject);
+      localStorage.setItem('projects', JSON.stringify(projects));
+
+      document.getElementById('success-msg').textContent = "✅ Project added successfully!";
+      this.reset();
+    });
+  </script>
+</body>
+</html>
